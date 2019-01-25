@@ -15,11 +15,11 @@ module PwnedPassword
 
       def prompt
         print 'password> '
-        if @options[:quiet]
+        if @options[:echo]
+          pwd = gets.strip
+        else
           pwd = STDIN.noecho(&:gets).strip
           puts
-        else
-          pwd = gets.strip
         end
 
         query(pwd)

@@ -7,6 +7,7 @@ Supports:
  * single password check
  * bulk password check:
   * KDBX format via [rubeepass](https://gitlab.com/mjwhitta/rubeepass)
+  * 1Password vaults via [op CLI](https://support.1password.com/command-line/) - you must first authenticate with `op signin <subdomain>` before `op signing` works as expected without explicit arguments
 
 ## Install (not done yet)
 
@@ -16,35 +17,37 @@ Supports:
 
 ```bash
 # built in help
-pwned-password-checker -h
+pwned-password-checker --help
 Usage:
 
-pwned-password-checker               to check a single password
-pwned-password-checker --bulk kdbx   to do a bulk check of a KDBX file
+pwned-password-checker                       checks a single password
+pwned-password-checker --bulk kdbx           bulk check of a KDBX file
+pwned-password-checker --bulk onepassword    bulk check of 1Password vaults
 
-    -p, --pwn pwned-passwords.txt    Path to pwned passwords file. Defaults to ~/.pwn/pwned-passwords-sha1-ordered-by-hash-v4.txt
+    -p pwned-sha1-passwords.txt,     Path to pwned passwords file. Defaults to ~/.pwn/pwned-passwords-sha1-ordered-by-hash-v4.txt
+        --pwn
     -i, --index ~/.pwn/idx           Path to the directory where the index is going to be written. Defaults to ~/.pwn/idx
-    -q, --quiet                      Whether to turn on quiet mode which suppress the password prompt
-    -b, --bulk kdbx                  Turns on bulk checking against supported backends: kdbx
+    -e, --echo                       Whether to turn on the password output in the prompt
+    -b, --bulk kdbx|onepassword      Turns on bulk checking against supported backends: kdbx, onepassword
     -h, --help                       Show this help
 ```
 
 ```bash
-# search single password using default options
+# search single password
 pwned-password-checker
-password> foo
-Hash: 0BEEC7B5EA3F0FDBC95D0DD47F3C5BC275DA8A33
-This password has been seen 5190 times before
-Seek time: 5.59 ms
-```
-
-```bash
-# search single password in quiet mode
-pwned-password-checker --quiet
 password>
 Hash: 0BEEC7B5EA3F0FDBC95D0DD47F3C5BC275DA8A33
 This password has been seen 5190 times before
 Seek time: 7.07 ms
+```
+
+```bash
+# search single password using echo mode
+pwned-password-checker --echo
+password> foo
+Hash: 0BEEC7B5EA3F0FDBC95D0DD47F3C5BC275DA8A33
+This password has been seen 5190 times before
+Seek time: 5.59 ms
 ```
 
 ```bash
@@ -66,7 +69,6 @@ KDBX key file>
 ## TODO
 
  * Implement bulk mode:
-  * 1Password
   * Bitwarden (requires bit of research - may not happen)
   * Plaintext list of passwords
  * Publish as a gem
