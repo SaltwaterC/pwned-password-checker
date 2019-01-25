@@ -10,10 +10,11 @@ module PwnedPassword
       end
 
       def read_bucket(idx, pwn, hash)
+        validate(idx, pwn)
         dir = hash[(0..1)]
         bucket = hash[(0..3)]
-        path = "#{idx}/#{dir}/#{bucket}"
-        offsets = YAML.load_file(path)
+
+        offsets = YAML.load_file("#{idx}/#{dir}/#{bucket}")
 
         File.open(pwn) do |fd|
           fd.pos = offsets['s']
@@ -28,6 +29,7 @@ module PwnedPassword
 
         bucket.each_line do |line|
           next unless line.start_with?(hash)
+
           return line.strip.split(':')[1].to_i
         end
 
@@ -38,6 +40,13 @@ module PwnedPassword
         hash = sha1(pwd)
         bucket = read_bucket(idx, pwn, hash)
         find_hash(bucket, hash)
+      end
+
+      def validate(idx, pwn)
+        raise 'Error: unable to find index' unless Dir.exist?(idx)
+        return if File.exist?(pwn)
+
+        raise 'Error: unable to find pwned passwords file'
       end
     end
   end
