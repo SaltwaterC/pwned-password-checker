@@ -43,10 +43,15 @@ module PwnedPassword
       end
 
       def validate(idx, pwn)
-        raise "Error: unable to find index at #{idx}" unless Dir.exist?(idx)
+        raise_error "unable to find index at #{idx}" unless Dir.exist?(idx)
         return if File.exist?(pwn)
 
-        raise "Error: unable to find pwned passwords file at #{pwn}"
+        raise_error "unable to find pwned passwords file at #{pwn}"
+      end
+
+      def raise_error(msg)
+        STDERR.puts("Error: #{msg}")
+        exit(2)
       end
     end
   end
