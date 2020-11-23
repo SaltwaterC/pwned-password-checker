@@ -24,7 +24,7 @@ pwned-password-checker                       checks a single password
 pwned-password-checker --bulk kdbx           bulk check of a KDBX file
 pwned-password-checker --bulk onepassword    bulk check of 1Password vaults
 
-    -p pwned-sha1-passwords.txt,     Path to pwned passwords file. Defaults to ~/.pwn/pwned-passwords-sha1-ordered-by-hash-v4.txt
+    -p pwned-sha1-passwords.txt,     Path to pwned passwords file. Defaults to ~/.pwn/pwned-passwords-sha1-ordered-by-hash-v7.txt
         --pwn
     -i, --index ~/.pwn/idx           Path to the directory where the index is going to be written. Defaults to ~/.pwn/idx
     -e, --echo                       Whether to turn on the password output in the prompt
