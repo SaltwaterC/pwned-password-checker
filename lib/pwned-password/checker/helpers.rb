@@ -1,4 +1,3 @@
-require 'yaml'
 require 'digest'
 
 module PwnedPassword
@@ -9,49 +8,41 @@ module PwnedPassword
         Digest::SHA1.hexdigest(password).upcase
       end
 
-      def read_bucket(idx, pwn, hash)
-        validate(idx, pwn)
-        dir = hash[(0..1)]
-        bucket = hash[(0..3)]
-
-        offsets = YAML.load_file("#{idx}/#{dir}/#{bucket}")
-
-        File.open(pwn) do |fd|
-          fd.pos = offsets['s']
-          fd.read(offsets['e'] - offsets['s'])
-        end
-      rescue Errno::ENOENT
-        nil
-      end
-
-      def find_hash(bucket, hash)
-        return bucket if bucket.nil?
-
-        bucket.each_line do |line|
-          next unless line.start_with?(hash)
-
-          return line.strip.split(':')[1].to_i
-        end
-
-        nil
-      end
-
-      def hash_count(idx, pwn, pwd)
+      def hash_count(pwn, pwd)
+        validate_dir(pwn)
         hash = sha1(pwd)
-        bucket = read_bucket(idx, pwn, hash)
-        find_hash(bucket, hash)
-      end
-
-      def validate(idx, pwn)
-        raise_error "unable to find index at #{idx}" unless Dir.exist?(idx)
-        return if File.exist?(pwn)
-
-        raise_error "unable to find pwned passwords file at #{pwn}"
+        range = hash[(0..4)]
+        suffix = hash[(5..-1)]
+        validate_file(pwn, range)
+        find_hash(pwn, range, suffix)
       end
 
       def raise_error(msg)
         STDERR.puts("Error: #{msg}")
         exit(2)
+      end
+
+      def validate_dir(pwn)
+        return if Dir.exists?(pwn)
+
+        raise_error "unable to find pwned password directory at #{pwn}"
+      end
+
+      def validate_file(pwn, range)
+        file = "#{pwn}/#{range}.txt"
+        return if File.exists?(file)
+
+        raise_error "unable to find pwned password range file at #{file}"
+      end
+
+      def find_hash(pwn, range, suffix)
+        File.read("#{pwn}/#{range}.txt").each_line do |line|
+          next unless line.start_with?(suffix)
+
+          return line.strip.split(':')[1].to_i
+        end
+
+        nil
       end
     end
   end

@@ -33,7 +33,7 @@ module PwnedPassword
 
         count = nil
         bm = Benchmark.measure do
-          count = hash_count(@options[:index], @options[:pwn], pwd)
+          count = hash_count(@options[:pwn], pwd)
         end
 
         results(bm, count)

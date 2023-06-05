@@ -79,7 +79,7 @@ module PwnedPassword
 
       def process_item(item, pwned)
         extract_passwords(item).each do |name, password|
-          count = hash_count(@options[:index], @options[:pwn], password)
+          count = hash_count(@options[:pwn], password)
           next unless count
 
           collect_pwned_passwords(item, pwned, name, password, count)

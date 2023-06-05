@@ -56,7 +56,7 @@ module PwnedPassword
         end
 
         group.entries.each do |_n, entry|
-          count = hash_count(@options[:index], @options[:pwn], entry.password)
+          count = hash_count(@options[:pwn], entry.password)
           next unless count
 
           update_pwned(pwned, group, entry, count)

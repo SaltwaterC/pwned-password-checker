@@ -1,6 +1,6 @@
 # pwned-password-checker
 
-Offline search into a pwned password list. Uses the index created by [pwned-password-tools](https://github.com/SaltwaterC/pwned-password-tools) pwned-password-indexer.
+Offline search into a pwned password list. Download the list of pwned passwords using [pwned-password-downloader](https://github.com/SaltwaterC/pwned-password-downloader) (from same author) or [PwnedPasswordsDownloader](https://github.com/HaveIBeenPwned/PwnedPasswordsDownloader) (official tool).
 
 Supports:
 
@@ -24,9 +24,7 @@ pwned-password-checker                       checks a single password
 pwned-password-checker --bulk kdbx           bulk check of a KDBX file
 pwned-password-checker --bulk onepassword    bulk check of 1Password vaults
 
-    -p pwned-sha1-passwords.txt,     Path to pwned passwords file. Defaults to ~/.pwn/pwned-passwords-sha1-ordered-by-hash-v7.txt
-        --pwn
-    -i, --index ~/.pwn/idx           Path to the directory where the index is going to be written. Defaults to ~/.pwn/idx
+    -p, --pwn ~/.pwn                 Path to pwned passwords directory. Defaults to ~/.pwn
     -e, --echo                       Whether to turn on the password output in the prompt
     -b, --bulk kdbx|onepassword      Turns on bulk checking against supported backends: kdbx, onepassword
     -h, --help                       Show this help
@@ -37,8 +35,8 @@ pwned-password-checker --bulk onepassword    bulk check of 1Password vaults
 pwned-password-checker
 password>
 Hash: 0BEEC7B5EA3F0FDBC95D0DD47F3C5BC275DA8A33
-This password has been seen 5190 times before
-Seek time: 7.07 ms
+This password has been seen 5396 times before
+Seek time: 0.38 ms
 ```
 
 ```bash
@@ -46,8 +44,8 @@ Seek time: 7.07 ms
 pwned-password-checker --echo
 password> foo
 Hash: 0BEEC7B5EA3F0FDBC95D0DD47F3C5BC275DA8A33
-This password has been seen 5190 times before
-Seek time: 5.59 ms
+This password has been seen 5396 times before
+Seek time: 0.28 ms
 ```
 
 ```bash
@@ -68,7 +66,5 @@ KDBX key file>
 
 ## TODO
 
- * Implement bulk mode:
-  * Bitwarden (requires bit of research - may not happen)
-  * Plaintext list of passwords
+ * Implement bulk mode: plaintext list of passwords
  * Publish as a gem
